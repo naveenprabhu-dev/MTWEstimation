@@ -67,11 +67,20 @@ for ntask_val in num_tasks_vec:
 
         # Use only subset of data 
         data_subset_j = [ x[:T_val] for x in ts_data_all[:ntask_val] ]
+        print("Shape of data subset j: ", data_subset_j[0].shape)
+        print("Length of data_subset j: ", len(data_subset_j))
+        print("Shape of one task in data_subset_j:", data_subset_j[0].shape)
+        
+        break
 
         # Fit multitask VAR (j-th combination)
         result_j = fit_WassVAR1(ts_data_list = data_subset_j,
                                 wassPen_vals = wassP_list,
                                 ground_M = M)  # Supply true M matrix 
+        
+        print("Shape of M", M.shape)
+        print("Ground metric M:", M)
+    
 
         # For each value of wassPen, compute average (k-th value of wassPen)
         mse_wassPen_list = []
