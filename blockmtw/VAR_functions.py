@@ -3,7 +3,7 @@ import numpy as np
 import warnings
 
 # Simulate VAR(1)
-def simulateVAR1(Phi, Sigma, T = 100, burn_in = 1000):
+def simulateVAR1(Phi, Sigma, T = 100, use_seed = None, burn_in = 1000):
 
     """
     Function to simulate VAR(1)
@@ -19,7 +19,9 @@ def simulateVAR1(Phi, Sigma, T = 100, burn_in = 1000):
     assert len(Sigma.shape) == 2
     assert np.allclose(Sigma.T, Sigma)
     assert type(T) is int
-
+    
+    rng = np.random.default_rng(use_seed)
+    
     # Get dimension 
     k = Phi.shape[0]
 
@@ -28,10 +30,10 @@ def simulateVAR1(Phi, Sigma, T = 100, burn_in = 1000):
 
     # Initialize container 
     y = np.zeros((TTotal, k))
-    y[0,] = np.random.normal(0,1,size=k) 
+    y[0,] = rng.normal(0,1,size=k) 
 
     # Generate errors 
-    errors = np.random.multivariate_normal(mean = np.zeros(k),
+    errors = rng.multivariate_normal(mean = np.zeros(k),
                                            cov = Sigma,
                                            size = TTotal - 1)
 
