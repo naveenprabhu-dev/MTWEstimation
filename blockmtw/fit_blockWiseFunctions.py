@@ -492,7 +492,7 @@ def fit_WassColumnWise(alpha, ground_M, Xs, Ys, N, n_tasks, d, Phi_init=None, n_
             # print("Ground m indices:", np.ix_(col_idx, col_idx))
             
             
-            M_sub = ground_M[c::d, c::d] # Grabs the corresponding d x d submatrix in M for this column (not contiguous)
+            M_sub = ground_M[c::d, c::d] # Grabs the corresponding d x d submatrix in M for this column (not contiguous). This is same as [col_idx, col_idx]
             # print("Ground M shape:", ground_M.shape)
             # print("COL 1:", M_sub)
             # print("COL 2:", ground_M[c+1::d, c+1::d])
@@ -561,7 +561,7 @@ def fit_WassColumnWise(alpha, ground_M, Xs, Ys, N, n_tasks, d, Phi_init=None, n_
             elif coefs.shape == (n_tasks, d):
                 B = coefs.T
             else:
-                raise ValueError(f"Unexpected MTW coefs_ shape: {coefs.shape}; expected (d, n_tasks) or (n_tasks, d).")
+                raise ValueError(f"Unexpected MTW coefs_ shape: {coefs.shape}; expected d, n_tasks) or (n_tasks, d).")
 
             
             # Update the column c across tasks
