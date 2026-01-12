@@ -38,7 +38,7 @@ for pid, count in rows_per_id.items():
 rows_per_id.to_csv("rows_per_participant.csv", index=False)
 
 # # Keep only participants with exactly 56 observations (expected for this dataset)
-ids_with_56 = rows_per_id[rows_per_id == 56].index.tolist()
+ids_with_56 = rows_per_id[rows_per_id == TOTAL_POINTS].index.tolist()
 print("People who have exactly 56 rows:", ids_with_56)
 ema = ema[ema["ID"].isin(ids_with_56)].copy()
 
