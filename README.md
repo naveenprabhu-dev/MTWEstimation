@@ -16,31 +16,27 @@ Fried, Papanikolaou, & Epskamp — “Mental health and social contact during th
 - 4 prompts/day (fixed schedule)
 
 ---
-## Executing the program
-Modify the configurations at the top of ema_script.py. You can change the folds, test set, total time points, parallel jobs, minimum participants, and horizon for choosing the best alpha in CV. 
-
-Run the script! It will save plots for each of the test samples, showing the performance for each of the ground metrics which are generated from chosen word embedding models, see (Kjell, 2023) below. 
 
 ## Reproducibility
 
-- Fix random seeds in Python/NumPy for CV splits and any randomized initialization.
-- Record package versions (e.g., `pip freeze > requirements-lock.txt`).
-- Save fitted matrices and CV tables with a timestamped run ID.
+1) Create the environment: from the project root, run 
+    ```python
+    conda env create -f environment.yml
+    ```
+2) Activate the environment: 
+    ```python
+    conda activate mtw-env
+    ```
+---
+
+## Executing the program
+Modify the configurations at the top of ema_script.py. You can change the folds, test set, total time points, parallel jobs, minimum participants, and horizon for choosing the best alpha in CV. 
+
+Run the script! It will save plots for each of the test samples, showing the performance for each of the ground metrics which are generated from word embeddings from various encoder-only models, see (Kjell, 2023) below. 
 
 ---
 
-## References
-
-- Janati, H., Cuturi, M., & Gramfort, A. (2019). *Wasserstein regularization for sparse multi-task regression.* Proceedings of AISTATS 2019. (PMLR 89)  
-  Preprint: https://arxiv.org/abs/1805.07833
-
-- Fried, E. I., Papanikolaou, F., & Epskamp, S. (2022). *Mental health and social contact during the COVID-19 pandemic: An ecological momentary assessment study.* *Clinical Psychological Science, 10*(2), 340–354. https://doi.org/10.1177/21677026211017839
-
-- openESM dataset page for Fried (2021/2022): https://openesmdata.org/datasets/0001_fried/
-
----
-
-## BibTeX
+## Citations
 
 ```bibtex
 @inproceedings{janati2019wasserstein,
