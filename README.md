@@ -8,7 +8,7 @@ This repo is designed for ecological momentary assessment (EMA) / intensive long
 
 ## Dataset
 
-The main example (ema_script.py) is set up around the EMA study:
+The main example (ema_fried.py) is set up around the EMA study:
 
 Fried, Papanikolaou, & Epskamp — “Mental health and social contact during the COVID-19 pandemic: An ecological momentary assessment study.” 
 - 80 undergraduate students
@@ -30,11 +30,9 @@ Fried, Papanikolaou, & Epskamp — “Mental health and social contact during th
 ---
 
 ## Executing the program
-Modify the configurations at the top of ema_script.py. You can change the folds, test set, total time points, parallel jobs, minimum participants, and horizon for choosing the best alpha in CV. 
+If needed, modify the configurations at the top of ema_fried.py. You can change the folds, test set, total time points, parallel jobs, minimum participants, and horizon for choosing the best alpha in CV. 
 
-Run the script! It will save plots for each of the test samples, showing the performance for each of the ground metrics which are generated from word embeddings from various encoder-only models, see (Kjell, 2023) below. 
-
----
+Run the script! It will save a new plot for each of the test samples, with each plot containing info for all ground metrics (ground metrics generated from word embeddings from various encoder-only models, see get_ground_metrics.R and (Kjell, 2023) below.) Additional plots include task specific errors for each testing point. 
 
 ## Citations
 
