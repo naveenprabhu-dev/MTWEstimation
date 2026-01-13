@@ -1,6 +1,6 @@
 # Multi-Task Wasserstein–Regularized VAR(1) Estimation
 
-Multi-task estimation of **VAR(1)** dynamics across many related time series (tasks/subjects) using **Wasserstein regularization** to encourage similarity between tasks while still allowing task-specific coefficients.
+Multi-task estimation of **VAR(1)** dynamics across related time series using **Wasserstein regularization** to encourage similarity between tasks while still allowing task-specific coefficients.
 
 This repo is designed for ecological momentary assessment (EMA) / intensive longitudinal data, where each participant is one “task” and you want a separate VAR(1) coefficient matrix per participant, with coupling across participants.
 

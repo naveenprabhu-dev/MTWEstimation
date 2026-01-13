@@ -15,7 +15,7 @@ dependencies:
   # Parallelization
   - joblib
 
-  # Performance acceleration (used directly or indirectly)
+  # Performance acceleration
   - numba
 
   # Packaging support
