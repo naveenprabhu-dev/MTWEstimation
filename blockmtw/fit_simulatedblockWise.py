@@ -4,12 +4,9 @@ from groundmetric import create_ground_metric
 from fit_blockWiseFunctions import *
 import numpy as np 
 import time
-import pandas as pd
 ALPHA = 0.01
 N_PASSES = 10
 LAGS = 1
-
-
 
 # Simulated data experiment. We compare the impact of alpha = 0.01 vs alpha = 0.0 for various tasks and time points, given that the synthetic data has some predefined relationships.
 # Explores the effectiveness of columnWise Wasserstein regularization. 

@@ -2,11 +2,10 @@ from mtw import MTW
 import pandas as pd
 import os
 import numpy as np
-from fit_blockWiseFunctions import fit_WassColumnWise, cv_fitWassColumnWise
+from fit_blockWiseFunctions import cv_fitWassColumnWise
 from groundmetric import create_ground_metric
 import matplotlib.pyplot as plt
 import random
-from statsmodels.tsa.stattools import adfuller, kpss
 
 # =============================================================================
 # Config
@@ -17,6 +16,9 @@ TOTAL_POINTS = 56  # time points per participant
 MIN_PEOPLE = 30  # minimum number of participants with enough data
 N_JOBS = 6 # multiprocessing for CV
 LAGS = 1 # We only support VAR(1) for now.
+TEST_SAMPLES = 5 # This is the set for the final forecasting after choosing the best alpha. 
+HORIZON = 1 # CV horizon (how many points are predicted ahead during CV)
+
 
 alphas = [0.0, 1e-10, 1e-5, 1e-4, 5e-4, 1e-2, 5e-2, 0.1, 1.0, 2.0, 3.0, 4.0, 5.0, 10.0]
 # alphas = [1.0]
@@ -221,10 +223,10 @@ print(f"\nTotal raw: {len(all_ids)}, After interpolation: {len(interp_ids)}")
 # =============================================================================
 # MTW FITTING + FORECAST EVALUATION
 # =============================================================================
-horizon = 5 # This is the horizon for the final forecasting after choosing the best alpha. For modifying the horizon in the CV function, see the call to CV function.
+
 T = TOTAL_POINTS
 N_full = T - LAGS
-T_train = T - horizon
+T_train = T - TEST_SAMPLES
 N_train = T_train - LAGS
 
 # Build per-task regression arrays for MTW
@@ -323,7 +325,7 @@ def coefs_to_phi_list(coefs, d, n_tasks):
 errors = {
     h: {m_name: {"alpha0": [], f"bestalpha": []}
         for m_name in metric_mats.keys()}
-    for h in range(1, horizon + 1)
+    for h in range(1, TEST_SAMPLES + 1)
 }
 
 best_alphas_per_metric = {}
@@ -357,7 +359,7 @@ for m_name, M_mat in metric_mats.items():
 
     # Run cross validation, find best alpha
     print(f"\033[94m[{m_name}] Starting cross-validation to find best alpha...\033[0m")
-    cv_result = cv_fitWassColumnWise(ts_data_list=ts_data_train_list, Xs_array=Xs_train, Ys_array=Ys_train, ground_M=ground_M, wassPen_vals=alphas, n_folds=N_FOLDS, horizon=1, Phi_init=coefs_warm_start, n_jobs=N_JOBS)
+    cv_result = cv_fitWassColumnWise(ts_data_list=ts_data_train_list, Xs_array=Xs_train, Ys_array=Ys_train, ground_M=ground_M, wassPen_vals=alphas, n_folds=N_FOLDS, horizon=HORIZON, Phi_init=coefs_warm_start, n_jobs=N_JOBS)
     best_alpha = cv_result['best_alpha']
     best_alphas_per_metric[m_name] = best_alpha
     print(f"\033[92m[{m_name}] Best alpha selected: {best_alpha}\033[0m")
@@ -366,7 +368,7 @@ for m_name, M_mat in metric_mats.items():
         raise ValueError("fit_WassColumnWise did not return one Phi per task.")
 
     # Forecast evaluation: compare baseline vs best-alpha across horizons
-    print(f"\033[94m[{m_name}] Starting forecast evaluation for horizons 1-{horizon}...\033[0m")
+    print(f"\033[94m[{m_name}] Starting forecast evaluation for horizons 1-{TEST_SAMPLES}...\033[0m")
     for task_idx, mat in enumerate(full_ts):
         # y0: last training observation (index T_train - 1)
         y0 = mat[T_train - 1, :].astype(float)
@@ -376,9 +378,9 @@ for m_name, M_mat in metric_mats.items():
 
 
         # mat indices: 51..55
-        y_true_seq = mat[T_train:T_train + horizon, :]  # shape (H, d)
+        y_true_seq = mat[T_train:T_train + TEST_SAMPLES, :]  # shape (H, d)
 
-        for h in range(1, horizon + 1):
+        for h in range(1, TEST_SAMPLES + 1):
             # h-step VAR recursion uses Phi^h @ y0
             Phi0_h = np.linalg.matrix_power(Phi0, h)
             y_hat0 = Phi0_h @ y0
@@ -401,7 +403,7 @@ for m_name, M_mat in metric_mats.items():
 
 
 # Print numeric results for differences (best_alpha - alpha0)
-for h in range(1, horizon + 1):
+for h in range(1, TEST_SAMPLES + 1):
     print(f"\n===== Horizon {h} step(s) =====")
     for m_name in metric_mats.keys():
         diff_arr = np.array(errors[h][m_name]["diff"])
@@ -422,7 +424,7 @@ metric_order = ["bert", "roberta", "xl"]
 # PLOTTING
 # =============================================================================
 # Boxplots per horizon
-for h in range(1, horizon + 1):
+for h in range(1, TEST_SAMPLES + 1):
     fig, ax = plt.subplots(figsize=(10, 6))
 
     box_data = []
@@ -448,7 +450,7 @@ for h in range(1, horizon + 1):
 
 # Per-task bar plots: for each horizon, show diffs by task across metrics
 
-for h in range(1, horizon + 1):
+for h in range(1, TEST_SAMPLES + 1):
     fig, ax = plt.subplots(figsize=(14, 6))
 
     # x positions for tasks: 0, 1, ..., n_tasks-1

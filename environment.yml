@@ -1,0 +1,22 @@
+name: mtw-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+
+  # Core scientific computing
+  - numpy
+  - pandas
+  - scipy
+
+  # Plotting
+  - matplotlib
+
+  # Parallelization
+  - joblib
+
+  # Performance acceleration (used directly or indirectly)
+  - numba
+
+  # Packaging support
+  - pip

@@ -6,7 +6,6 @@ from fit_blockWiseFunctions import fit_WassColumnWise, cv_fitWassColumnWise
 from groundmetric import create_ground_metric
 import matplotlib.pyplot as plt
 import random
-from statsmodels.tsa.stattools import adfuller, kpss
 
 random.seed(395)  # reproducible selection
 N_FOLDS = 5
