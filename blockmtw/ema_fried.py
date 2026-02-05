@@ -271,7 +271,7 @@ M_train = Ys_train.shape[1]                           # should be d * N_train = 
 print("Xs_train:", Xs_train.shape, "Ys_train:", Ys_train.shape)
 print(f"N_train (per task) = {N_train}, M_train = {M_train}")
 
-# Ground metrics from get_word_embeddings.R
+# Ground metrics from get_ground_metrics.R
 M_bert = np.array([
     [0.000000, 9.026052, 9.039160, 9.102301,10.789334,10.224275,10.472787,11.015110],
     [9.026052, 0.000000, 9.775446, 7.802097,11.427602,11.433619,11.179109,11.796992],

@@ -32,7 +32,12 @@ Fried, Papanikolaou, & Epskamp — “Mental health and social contact during th
 ## Executing the program
 If needed, modify the configurations at the top of ema_fried.py. You can change the folds, test set, total time points, parallel jobs, minimum participants, and horizon for choosing the best alpha in CV. 
 
-Run the script! It will save a new plot for each of the test samples, with each plot containing info for all ground metrics (ground metrics generated from word embeddings from various encoder-only models, see get_ground_metrics.R and (Kjell, 2023) below.) Additional plots include task specific errors for each testing point. 
+From the project root, run 
+  ```python
+    python blockmtw/ema_fried.py
+  ```
+
+It will save a new plot for each of the test samples, with each plot containing info for all ground metrics (ground metrics generated from word embeddings from various encoder-only models, see get_ground_metrics.R and (Kjell, 2023) below.) Additional plots include task specific errors for each testing point. 
 
 ## Citations
 
